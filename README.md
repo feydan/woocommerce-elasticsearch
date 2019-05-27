@@ -8,12 +8,18 @@ This project demonstrates live search using Elasticsearch with a Woocommerce api
 ## Installation
 Docker-compose is configured to install the dependencies necessary for this project
 
-1. `docker-compose up` in the root directory
+1. `docker-compose up -d` in the root directory
 2. `npm install`
 3. `npm run dev`
 
 ## Import Woocommerce data
 `docker-compose exec app php artisan woocommerce:import`
+
+## Navigate to the home page
+http://localhost
+
+## Logs
+Tail the docker logs: `docker-compose logs -f`
 
 ## Application versions
 - php 7.2
