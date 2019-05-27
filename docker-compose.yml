@@ -1,7 +1,7 @@
 version: '3'
 services:
 
-  #PHP Service
+  # PHP Service
   app:
     build:
       context: .
@@ -15,7 +15,14 @@ services:
     volumes:
       - ./:/var/www
 
-  #Nginx Service
+  # Elasticsearch Service
+  elasticsearch:
+    image: elasticsearch:7.1.0
+    restart: unless-stopped
+    environment:
+      - "discovery.type=single-node"
+
+  # Nginx Service
   webserver:
     image: nginx:alpine
     restart: unless-stopped
