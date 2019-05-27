@@ -1,0 +1,28 @@
+# Woocommerce Elasticsearch
+This project demonstrates live search using Elasticsearch with a Woocommerce api integration for fetching data and indexing it into Elasticsearch
+
+## Installation
+Docker-compose is configured to install the dependencies necessary for this project
+
+1. If you do not have docker or docker-compose installed, install them.
+2. `docker-compose up` in the root directory
+
+## Import Woocommerce data
+
+
+## Other considerations
+- Do not check in production secrets located in the .env file
+
+
+## Application versions
+- php 7.2
+- Laravel 5.8
+- Elasticsearch 7.1
+
+##
+
+## Resources
+
+Some code was copied and/or adapted from the following:
+
+- https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose
