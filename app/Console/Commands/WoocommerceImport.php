@@ -2,14 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Transforms\OrderTransform;
 use Elasticsearch;
 use Illuminate\Console\Command;
 use Woocommerce;
 
 class WoocommerceImport extends Command
 {
-    const INDEX_NAME = 'orders';
-
     /**
      * The name and signature of the console command.
      *
@@ -24,6 +23,9 @@ class WoocommerceImport extends Command
      */
     protected $description = 'Imports data from the Woocommerce API into Elasticsearch';
 
+    /** @var */
+    protected $indexName;
+
     /**
      * Create a new command instance.
      *
@@ -32,6 +34,7 @@ class WoocommerceImport extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->indexName = config('elasticsearch.defaultIndex');
     }
 
     /**
@@ -63,7 +66,7 @@ class WoocommerceImport extends Command
         // TODO We could use aliases to build a new index first and switch it over to maintain functionality
         // TODO while the reindex happens instead of deleting first
         try {
-            Elasticsearch::connection()->indices()->delete(['index' => self::INDEX_NAME]);
+            Elasticsearch::connection()->indices()->delete(['index' => $this->indexName]);
             $this->info('Deleted previous index.');
         } catch (Elasticsearch\Common\Exceptions\Missing404Exception $e) {
             $this->info('No index to delete, proceeding.');
@@ -81,7 +84,7 @@ class WoocommerceImport extends Command
         $this->info('Creating index.');
         // Create the index with proper mappings
         Elasticsearch::connection()->indices()->create([
-            'index' => self::INDEX_NAME,
+            'index' => $this->indexName,
             'body' => [
                 'settings' => [
                     // TODO Change these settings on production to allow for high availability and ~50gb per shard
@@ -145,33 +148,15 @@ class WoocommerceImport extends Command
         foreach ($orders as $order) {
             $bulkParams[] = [
                 'index' => [
-                    '_index' => self::INDEX_NAME,
+                    '_index' => $this->indexName,
                     '_id' => $order['id']
                 ]
             ];
-            $bulkParams[] = [
-                'id' => $order['id'],
-                'shipping_first_name' => $order['shipping']['first_name'],
-                'shipping_last_name' => $order['shipping']['last_name'],
-                'shipping_address_1' => $order['shipping']['address_1'],
-                'shipping_city' => $order['shipping']['city'],
-                'shipping_state' => $order['shipping']['state'],
-                'shipping_postcode' => $order['shipping']['postcode'],
-                'line_items' => array_map(
-                    function ($lineItem) {
-                        return [
-                            'name' => $lineItem['name'],
-                            'price' => $lineItem['total'],
-                            'quantity' => $lineItem['quantity'],
-                        ];
-                    },
-                    $order['line_items']
-                ),
-            ];
+            $bulkParams[] = OrderTransform::transformToElasticsearch($order);
         }
 
         Elasticsearch::connection()->bulk([
-            'index' => self::INDEX_NAME,
+            'index' => $this->indexName,
             'body' => $bulkParams,
         ]);
     }

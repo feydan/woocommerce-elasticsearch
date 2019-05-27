@@ -12,5 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
+
+Route::get('search', 'SearchController@search');
+Route::get('order/{orderId}', 'OrderController@get');

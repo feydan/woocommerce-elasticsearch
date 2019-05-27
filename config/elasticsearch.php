@@ -2,6 +2,8 @@
 
 return [
 
+    'defaultIndex' => env('ELASTICSEARCH_INDEX','orders'),
+
     /**
      * You can specify one of several different connections when building an
      * Elasticsearch client.
