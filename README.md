@@ -26,6 +26,18 @@ Tail the docker logs: `docker-compose logs -f`
 - Laravel 5.8
 - Elasticsearch 7.1
 
+## Notable files added/modified
+- app/Console/Commands/WoocommerceImport.php
+- app/Http/Controllers/OrderController.php
+- app/Http/Controllers/SearchController.php
+- nginx/*
+- resources/js/components/*
+- resources/js/app.js
+- resources/views/*
+- routes/web.php
+- Dockerfile
+- docker-compose.yml
+
 ## Resources
 
 Some code was copied and/or adapted from the following:
