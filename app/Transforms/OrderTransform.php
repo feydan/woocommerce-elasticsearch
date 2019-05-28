@@ -4,7 +4,14 @@ namespace App\Transforms;
 
 class OrderTransform
 {
-    public static function transformToElasticsearch($woocommerceOrder)
+    /**
+     * Transforms an order from the Woocommerce api into Elasticsearch doc format
+     *
+     * @param array $woocommerceOrder
+     *
+     * @return array
+     */
+    public static function transformToElasticsearch(array $woocommerceOrder): array
     {
         return [
             'id' => $woocommerceOrder['id'],

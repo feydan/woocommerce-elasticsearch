@@ -10,6 +10,14 @@ use Woocommerce;
 
 class OrderController extends BaseController
 {
+    /**
+     * Get a single order by id
+     *
+     * @param Request $request
+     * @param $orderId
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function get(Request $request, $orderId)
     {
         $fromIndex = $request->get('fromIndex', false);
@@ -19,6 +27,13 @@ class OrderController extends BaseController
         return view('order', ['order' => $order]);
     }
 
+    /**
+     * Gets an order from the Elasticsearch index
+     *
+     * @param $orderId
+     *
+     * @return mixed
+     */
     protected function getOrderFromIndex($orderId)
     {
         $params = [
@@ -30,6 +45,13 @@ class OrderController extends BaseController
         return Elasticsearch::connection()->get($params)['_source'];
     }
 
+    /**
+     * Gets an order from Woocommerce using the api
+     *
+     * @param $orderId
+     *
+     * @return array
+     */
     protected function getOrderFromWoocommerce($orderId)
     {
         return OrderTransform::transformToElasticsearch(Woocommerce::get("orders/{$orderId}"));

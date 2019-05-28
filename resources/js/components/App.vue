@@ -60,7 +60,6 @@
                 window.axios.get('/search?query=' + this.query).then(({ data }) => {
                     var orders = [];
                     data.forEach(order => {
-                        console.log(order);
                         var line_items = order.line_items;
                         delete order.line_items;
                         line_items.forEach(line_item => {
