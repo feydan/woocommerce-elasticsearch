@@ -73,7 +73,7 @@
         </div>
         <div class="row">
             <div class="col-sm">
-                Product Quantity
+                Product Price
             </div>
             <div class="col">
                 {{ $lineItem['price'] }}
