@@ -6,7 +6,7 @@ This project demonstrates live search using Elasticsearch with a Woocommerce api
 - Node (v8) / NPM
 
 ## Installation
-Docker-compose is configured to install the dependencies necessary for this project
+Docker-compose is configured to install the Nginx web server, php application with php-fpm, and Elasticsearch.
 
 Perform the following in the root project directory:
 
